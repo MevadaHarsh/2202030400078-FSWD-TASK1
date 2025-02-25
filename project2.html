@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+      <h2 class="text-2xl font-bold mb-4 text-center">Expense Tracker</h2>
+
+      <div class="flex flex-col space-y-2">
+        <input
+          type="text"
+          id="expenseName"
+          class="border p-2 rounded"
+          placeholder="Expense Name"
+        />
+        <input
+          type="number"
+          id="expenseAmount"
+          class="border p-2 rounded"
+          placeholder="Amount (₹)"
+        />
+        <button
+          onclick="addExpense()"
+          class="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Add Expense
+        </button>
+      </div>
+
+      <ul id="expenseList" class="mt-4 space-y-2"></ul>
+
+      <p class="mt-4 text-lg font-semibold text-center">
+        Total: ₹<span id="totalAmount">0</span>
+      </p>
+    </div>
+
+    <script>
+      function addExpense() {
+        let nameInput = document.getElementById("expenseName");
+        let amountInput = document.getElementById("expenseAmount");
+        let name = nameInput.value.trim();
+        let amount = parseFloat(amountInput.value);
+
+        if (name === "" || isNaN(amount) || amount <= 0) return;
+
+        let li = document.createElement("li");
+        li.className =
+          "flex justify-between items-center bg-gray-200 p-2 rounded";
+
+        let span = document.createElement("span");
+        span.textContent = `${name} - ₹${amount.toFixed(2)}`;
+
+        let deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "✖";
+        deleteBtn.className = "text-red-600 px-2";
+        deleteBtn.onclick = function () {
+          li.remove();
+          updateTotal(-amount);
+        };
+
+        li.appendChild(span);
+        li.appendChild(deleteBtn);
+
+        document.getElementById("expenseList").appendChild(li);
+        updateTotal(amount);
+
+        nameInput.value = "";
+        amountInput.value = "";
+      }
+
+      function updateTotal(amount) {
+        let totalAmount = document.getElementById("totalAmount");
+        totalAmount.textContent = (parseFloat(totalAmount.textContent) + amount).toFixed(2);
+      }
+    </script>
+  </body>
+</html>
